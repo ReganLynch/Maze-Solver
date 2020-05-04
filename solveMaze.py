@@ -1,5 +1,6 @@
 import sys
 from mazeImageProcessor import *
+from Maze import *
 from os import path
 
 
@@ -21,6 +22,9 @@ def main():
         exit()
     #create a maze image processor object
     imageProcessor = mazeImageProcessor(path.abspath(file_path))
+
+    #create the maze object from the image proccessing objects boolean maze
+    maze = Maze(imageProcessor.boolean_maze, imageProcessor.width_cubes, imageProcessor.height_cubes)
 
 
 if __name__ == '__main__':
