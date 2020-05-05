@@ -13,14 +13,14 @@ class mazeNode:
         self.left_neighbour = None
         self.right_neighbour = None
 
-    def add_top_neighbour(self, neighbour):
+    def set_top_neighbour(self, neighbour):
         self.top_neighbour = neighbour
 
-    def add_bottom_neighbour(self, neighbour):
+    def set_bottom_neighbour(self, neighbour):
         self.bottom_neighbour = neighbour
 
-    def add_left_neighbour(self, neighbour):
+    def set_left_neighbour(self, neighbour):
         self.left_neighbour = neighbour
 
-    def add_right_neighbour(self, neighbour):
+    def set_right_neighbour(self, neighbour):
         self.right_neighbour = neighbour

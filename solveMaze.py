@@ -24,7 +24,7 @@ def main():
     imageProcessor = mazeImageProcessor(path.abspath(file_path))
 
     #create the maze object from the image proccessing objects boolean maze
-    maze = Maze(imageProcessor.boolean_maze, imageProcessor.width_cubes, imageProcessor.height_cubes)
+    maze = Maze(imageProcessor.boolean_maze, imageProcessor.width_cubes, imageProcessor.height_cubes, imageProcessor)
 
 
 if __name__ == '__main__':

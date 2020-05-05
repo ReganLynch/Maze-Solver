@@ -27,7 +27,7 @@ class mazeImageProcessor:
     #determines the dimentions of the maze, in cubes
     def findMazeDimentions(self):
         self.width_cubes = int(self.width_px/self.cube_size) - 1  ## TODO: shouldnt have to minus 1 from this
-        self.height_cubes = int(self.height_px/self.cube_size) - 1 ## TODO: shouldne have to minus 1 from this 
+        self.height_cubes = int(self.height_px/self.cube_size) - 1 ## TODO: shouldne have to minus 1 from this
 
     #generates a boolean array, which represents the maze (false for wall, true for path)
     def createMazeBooleanArray(self):
@@ -40,14 +40,41 @@ class mazeImageProcessor:
                     self.boolean_maze[j][i] = True
 
     #fills in a cube section with a colour, based on the cube size
-    def fillMazeCubeSection(self, x_pos, y_pos, colour):
-        real_x = x_pos * self.cube_size
-        real_y = y_pos * self.cube_size
+    def fillMazeCubeSection(self, x, y, colour):
+        real_x = x * self.cube_size
+        real_y = y * self.cube_size
         for i in range(0, self.cube_size):  #x axis
             for j in range(0, self.cube_size):  #x axis
                 curr_x = real_x + i
                 curr_y = real_y + j
                 self.pixels[curr_x, curr_y] = colour
+
+    #fills in the section of a maze between two mazeNode objects with a certain colour
+    def fillMazeConnection(self, maze_node_a, maze_node_b, colour):
+        start_node = None
+        end_node = None
+        #if they are vertical to eachother
+        if maze_node_a.x == maze_node_b.x:
+            if maze_node_a.y > maze_node_b.y:
+                start_node = maze_node_b
+                end_node = maze_node_a
+            else:
+                start_node = maze_node_a
+                end_node = maze_node_b
+            #fill in the vertical tiles
+            for i in range(start_node.y + 1, end_node.y):
+                self.fillMazeCubeSection(start_node.x, i, colour)
+        #if they are horizontal to eachother
+        else:
+            if maze_node_a.x > maze_node_b.x:
+                start_node = maze_node_b
+                end_node = maze_node_a
+            else:
+                start_node = maze_node_a
+                end_node = maze_node_b
+            #fill in the horizontal tiles
+            for i in range(start_node.x + 1, end_node.x):
+                self.fillMazeCubeSection(i, start_node.y, colour)
 
     #saves the maze
     def saveSolvedMaze(self):
