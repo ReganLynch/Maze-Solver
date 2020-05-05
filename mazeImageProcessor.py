@@ -1,4 +1,5 @@
 from PIL import Image
+from mazeNode import *
 from os import path
 
 class mazeImageProcessor:
@@ -75,6 +76,40 @@ class mazeImageProcessor:
             #fill in the horizontal tiles
             for i in range(start_node.x + 1, end_node.x):
                 self.fillMazeCubeSection(i, start_node.y, colour)
+
+    #draws a path to the maze, from the root of the path, to the end. colours in the path with a gradient from green to red
+    def drawPath(self, root_node, path_length):
+        prev_node = None
+        curr_node = root_node
+        curr_node_index = 0
+        colour_step_size = 255 / path_length
+        while not curr_node.is_end:
+            #increment the current node index
+            curr_node_index = curr_node_index + 1
+            #calculate the colour value factor
+            colour_val_factor = int(255 * (curr_node_index / path_length))
+            #if on first node, just draw the node
+            if prev_node == None:
+                self.fillMazeCubeSection(curr_node.x, curr_node.y, (colour_val_factor, 255 - colour_val_factor, 0))
+            #if on any other node, draw the node, and the connection to the previous node
+            else:
+                self.fillMazeCubeSection(curr_node.x, curr_node.y, (colour_val_factor, 255 - colour_val_factor, 0))
+                self.fillMazeConnection(prev_node, curr_node, (colour_val_factor, 255 - colour_val_factor, 0))
+            #set the previous node to the current node
+            temp_prev_node = prev_node
+            prev_node = curr_node
+            #find what the current node is to be, based on which connection the current node has
+            if curr_node.top_neighbour != None and curr_node.top_neighbour != temp_prev_node:
+                curr_node = curr_node.top_neighbour
+            elif curr_node.bottom_neighbour != None and curr_node.bottom_neighbour != temp_prev_node:
+                curr_node = curr_node.bottom_neighbour
+            elif curr_node.left_neighbour != None and curr_node.left_neighbour != temp_prev_node:
+                curr_node = curr_node.left_neighbour
+            else:
+                curr_node = curr_node.right_neighbour
+        #draw the the end node
+        self.fillMazeCubeSection(curr_node.x, curr_node.y, (0, 255, 0))
+
 
     #saves the maze
     def saveSolvedMaze(self):

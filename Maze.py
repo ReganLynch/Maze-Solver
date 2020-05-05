@@ -10,6 +10,7 @@ class Maze:
         self.image_processor = image_processor
         self.start_node = None
         self.end_node = None
+        self.num_nodes = 0
         self.find_decision_nodes()
 
     #algorithm for generating only the essential decision nodes of this maze
@@ -18,10 +19,10 @@ class Maze:
         for i in range(0, self.maze_width):
             #if found start
             if self.boolean_maze[0][i]:
-                self.start_node = mazeNode(i, 0, is_start=True)
+                self.start_node = mazeNode(i, 0, 0, is_start=True)
             #if found end
             elif self.boolean_maze[self.maze_height-1][i]:
-                self.end_node = mazeNode(i, self.maze_height-1, is_end=True)
+                self.end_node = mazeNode(i, self.maze_height-1, 1, is_end=True)
         #validate that the start and end nodes where found
         err = False
         if self.start_node == None and self.end_node == None:
@@ -36,6 +37,8 @@ class Maze:
         #exit if either of the start or ends nodes were not found
         if err:
             exit()
+        #set the number of nodes
+        self.num_nodes = 2
         #---now find all escential nodes----
         #initialize the previous vertical nodes array
         prev_vertical_nodes = [None for i in range(0, self.maze_width)]
@@ -70,23 +73,17 @@ class Maze:
                 #if the node was found to be a decision node
                 if is_decision_node:
                     #set the current node
-                    curr_node = mazeNode(x, y)
-
-                    #draw the current node
-                    #self.image_processor.fillMazeCubeSection(curr_node.x, curr_node.y, (0, 255, 0))
-
+                    curr_node = mazeNode(x, y, self.num_nodes)
+                    #increment the number of nodes
+                    self.num_nodes = self.num_nodes + 1
                     #make horizontal connection
                     if not prev_horizontal_node == None:
-                        #self.image_processor.fillMazeConnection(prev_horizontal_node, curr_node, (255, 0, 0))
                         curr_node.set_left_neighbour(prev_horizontal_node)
                         prev_horizontal_node.set_right_neighbour(curr_node)
-
                     #make vertical connection
                     if not prev_vertical_nodes[x] == None:
-                        #self.image_processor.fillMazeConnection(prev_vertical_nodes[x], curr_node, (255, 0, 0))
                         curr_node.set_top_neighbour(prev_vertical_nodes[x])
                         prev_vertical_nodes[x].set_bottom_neighbour(curr_node)
-
                     #check if this node connects to either the start node or the end node
                     if curr_node.x == self.start_node.x and curr_node.y == self.start_node.y + 1:  #if connected to start node
                         self.start_node.set_bottom_neighbour(curr_node)
@@ -94,10 +91,7 @@ class Maze:
                     elif curr_node.x == self.end_node.x and curr_node.y == self.end_node.y - 1:  #if connected to end node
                         self.end_node.set_top_neighbour(curr_node)
                         curr_node.set_bottom_neighbour(self.end_node)
-
                     #set the previous vertical node
                     prev_vertical_nodes[x] = curr_node
                     #set the previous horizontal node
                     prev_horizontal_node = curr_node
-
-        #self.image_processor.saveSolvedMaze()

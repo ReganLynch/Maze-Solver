@@ -2,9 +2,10 @@
 
 class mazeNode:
 
-    def __init__(self, maze_pos_x, maze_pos_y, is_start=False, is_end=False):
+    def __init__(self, maze_pos_x, maze_pos_y, node_index, is_start=False, is_end=False):
         self.x = maze_pos_x
         self.y = maze_pos_y
+        self.node_index = node_index
         self.is_start_node = is_start
         self.is_end_node = is_end
         self.neighbours = []
