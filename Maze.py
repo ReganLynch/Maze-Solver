@@ -3,11 +3,10 @@ from mazeNode import *
 
 class Maze:
 
-    def __init__(self, boolean_maze, maze_width, maze_height, image_processor):
+    def __init__(self, boolean_maze, maze_width, maze_height):
         self.boolean_maze = boolean_maze
         self.maze_width = maze_width
         self.maze_height = maze_height
-        self.image_processor = image_processor
         self.start_node = None
         self.end_node = None
         self.num_nodes = 0

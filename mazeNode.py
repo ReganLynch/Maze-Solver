@@ -13,6 +13,8 @@ class mazeNode:
         self.bottom_neighbour = None
         self.left_neighbour = None
         self.right_neighbour = None
+        self.next_on_path = None
+        self.prev_on_path = None
 
     def set_top_neighbour(self, neighbour):
         self.top_neighbour = neighbour

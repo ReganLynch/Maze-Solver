@@ -9,8 +9,6 @@ class mazeImageProcessor:
 
     def __init__(self, maze_file_path):
         self.in_file_path = maze_file_path
-        file_name, file_extension = path.splitext(maze_file_path)
-        self.out_file_path = file_name + '_SOLVED' + file_extension
         self.pil_image = Image.open(self.in_file_path).convert('RGB')
         self.pixels = self.pil_image.load()
         self.width_px, self.height_px = self.pil_image.size
@@ -78,12 +76,12 @@ class mazeImageProcessor:
                 self.fillMazeCubeSection(i, start_node.y, colour)
 
     #draws a path to the maze, from the root of the path, to the end. colours in the path with a gradient from green to red
-    def drawPath(self, root_node, path_length):
+    def drawPath(self, path_root_node, path_length):
         prev_node = None
-        curr_node = root_node
+        curr_node = path_root_node
         curr_node_index = 0
         colour_step_size = 255 / path_length
-        while not curr_node.is_end:
+        while curr_node != None:
             #increment the current node index
             curr_node_index = curr_node_index + 1
             #calculate the colour value factor
@@ -96,21 +94,10 @@ class mazeImageProcessor:
                 self.fillMazeCubeSection(curr_node.x, curr_node.y, (colour_val_factor, 255 - colour_val_factor, 0))
                 self.fillMazeConnection(prev_node, curr_node, (colour_val_factor, 255 - colour_val_factor, 0))
             #set the previous node to the current node
-            temp_prev_node = prev_node
             prev_node = curr_node
-            #find what the current node is to be, based on which connection the current node has
-            if curr_node.top_neighbour != None and curr_node.top_neighbour != temp_prev_node:
-                curr_node = curr_node.top_neighbour
-            elif curr_node.bottom_neighbour != None and curr_node.bottom_neighbour != temp_prev_node:
-                curr_node = curr_node.bottom_neighbour
-            elif curr_node.left_neighbour != None and curr_node.left_neighbour != temp_prev_node:
-                curr_node = curr_node.left_neighbour
-            else:
-                curr_node = curr_node.right_neighbour
-        #draw the the end node
-        self.fillMazeCubeSection(curr_node.x, curr_node.y, (0, 255, 0))
-
+            curr_node = curr_node.next_on_path
 
     #saves the maze
-    def saveSolvedMaze(self):
-        self.pil_image.save(self.out_file_path)
+    def saveSolvedMaze(self, out_file_name):
+        file_name, file_extension = path.splitext(self.in_file_path)
+        self.pil_image.save(file_name + '_' + out_file_name + '_'+ file_extension)
