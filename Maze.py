@@ -1,4 +1,4 @@
-
+import datetime
 from mazeNode import *
 
 class Maze:
@@ -10,7 +10,11 @@ class Maze:
         self.start_node = None
         self.end_node = None
         self.num_nodes = 0
+        #generate the desicion nodes and keep track of the time it took to generate that data
+        self.generation_start_time = datetime.datetime.now()
         self.find_decision_nodes()
+        self.generation_end_time = datetime.datetime.now()
+        self.generation_time_elapsed = self.generation_end_time - self.generation_start_time
 
     #algorithm for generating only the essential decision nodes of this maze
     def find_decision_nodes(self):
@@ -94,3 +98,7 @@ class Maze:
                     prev_vertical_nodes[x] = curr_node
                     #set the previous horizontal node
                     prev_horizontal_node = curr_node
+
+    def print_maze_data(self):
+        print('Number of decision nodes found in maze: ', self.num_nodes)
+        print('Time spent creating graph from input maze: ', self.generation_time_elapsed.total_seconds(), ' seconds')

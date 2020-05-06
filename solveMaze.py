@@ -25,10 +25,14 @@ def main():
     image_processor = mazeImageProcessor(path.abspath(file_path))
     #create the maze object from the image proccessing objects boolean maze
     maze = Maze(image_processor.boolean_maze, image_processor.width_cubes, image_processor.height_cubes)
+    #print information about the maze
+    maze.print_maze_data()
     #create the maze solver object
     maze_solver = MazeSolver(maze)
     #generate a path, and the path length through depth-first search
     root, path_length = maze_solver.depthFirst()
+    #print some information about the performance of the search alg
+    maze_solver.print_maze_solve_data()
 
     #draw the path to the maze
     image_processor.drawPath(root, path_length)

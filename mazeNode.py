@@ -27,3 +27,15 @@ class mazeNode:
 
     def set_right_neighbour(self, neighbour):
         self.right_neighbour = neighbour
+
+    #return the root of the path that ends at this node and the length of that path
+    #this method also makes the forward connections of all of these nodes
+    def get_path_root_and_length(self):
+        #loop back through the PathNodes to get the start node and make the forward connections
+        path_length = 1
+        last_node = self
+        while last_node.prev_on_path != None:
+            path_length = path_length + 1
+            last_node.prev_on_path.next_on_path = last_node
+            last_node = last_node.prev_on_path
+        return last_node, path_length
