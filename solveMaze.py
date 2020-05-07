@@ -37,7 +37,7 @@ def main():
     #draw the path to the maze
     image_processor.drawPath(root, path_length)
     #save the image
-    image_processor.saveSolvedMaze('TEST')
+    image_processor.saveSolvedMaze('DFS')
 
 if __name__ == '__main__':
     main()
