@@ -18,7 +18,8 @@ class Maze:
 
     #algorithm for generating only the essential decision nodes of this maze
     def find_decision_nodes(self):
-        #first find start and end nodes
+        #first find start and end nodes (check top, bottom, then left and right sides of maze)
+        #   search top and bottom (top is start, bottom is end)
         for i in range(0, self.maze_width):
             #if found start
             if self.boolean_maze[0][i]:
@@ -26,6 +27,14 @@ class Maze:
             #if found end
             elif self.boolean_maze[self.maze_height-1][i]:
                 self.end_node = mazeNode(i, self.maze_height-1, 1, is_end=True)
+        #   search left and right (left is start, right is end)
+        for i in range(0, self.maze_height):
+            #if found start
+            if self.boolean_maze[i][0]:
+                self.start_node = mazeNode(0, i, 0, is_start=True)
+            #if found end
+            elif self.boolean_maze[i][self.maze_height-1]:
+                self.end_node = mazeNode(self.maze_width-1, i, 1, is_end=True)
         #validate that the start and end nodes where found
         err = False
         if self.start_node == None and self.end_node == None:

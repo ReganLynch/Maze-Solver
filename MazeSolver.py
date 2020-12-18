@@ -166,9 +166,7 @@ class MazeSolver:
                         heappush(open_set, neighbour)
                         #add neighbour to open index set
                         open_set_indexes.add(neighbour.node_index)
-
         #return the root node and the path length of the path that ends at last_node
-        #HERE
         ret = self.maze.end_node.get_path_root_and_length()
         #set the time it took to perform a*
         self.solve_end_time = datetime.datetime.now()

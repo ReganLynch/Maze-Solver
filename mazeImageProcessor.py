@@ -19,9 +19,15 @@ class mazeImageProcessor:
     #determine the size of the cubes in this maze (based on the size of the start position)
     def findCubeSize(self):
         self.cube_size = 0
+        #check top row for start node
         for i in range(0, self.width_px):
             if self.pixels[i,0] == mazeImageProcessor.WHITE:
                 self.cube_size = self.cube_size + 1
+        #if start node was not on the top row, check left-most column
+        if self.cube_size = 0:
+            for i in range(0, self.height_px):
+                if self.pixels[0,i] == mazeImageProcessor.WHITE:
+                    self.cube_size = self.cube_size + 1
 
     #determines the dimentions of the maze, in cubes
     def findMazeDimentions(self):
