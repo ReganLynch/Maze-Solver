@@ -8,13 +8,14 @@ class mazeNode:
         self.node_index = node_index
         self.is_start_node = is_start
         self.is_end_node = is_end
-        self.neighbours = []
         self.top_neighbour = None
         self.bottom_neighbour = None
         self.left_neighbour = None
         self.right_neighbour = None
         self.next_on_path = None
         self.prev_on_path = None
+        self.g = 0 if is_start else 10**1000      #used in A* algorithm
+        self.f = 0      #used in A* algorithm
 
     def set_top_neighbour(self, neighbour):
         self.top_neighbour = neighbour
@@ -28,6 +29,27 @@ class mazeNode:
     def set_right_neighbour(self, neighbour):
         self.right_neighbour = neighbour
 
+    #returns the list of neighbours of this node
+    def get_neighbours(self):
+        neighbours = []
+        if not self.top_neighbour == None:
+            neighbours.append(self.top_neighbour)
+        if not self.bottom_neighbour == None:
+            neighbours.append(self.bottom_neighbour)
+        if not self.left_neighbour == None:
+            neighbours.append(self.left_neighbour)
+        if not self.right_neighbour == None:
+            neighbours.append(self.right_neighbour)
+        return neighbours
+
+    #custom comparator used in A* algorithm by the min heap open set
+    def __lt__(self, other):
+        return self.f < other.f
+
+    #custom comparator used in A* algorithm by the min heap open set
+    def __gt__(self, other):
+        return self.f > other.f
+
     #return the root of the path that ends at this node and the length of that path
     #this method also makes the forward connections of all of these nodes
     def get_path_root_and_length(self):
@@ -39,3 +61,8 @@ class mazeNode:
             last_node.prev_on_path.next_on_path = last_node
             last_node = last_node.prev_on_path
         return last_node, path_length
+
+    #heuristic function -> used in A* search algorithm
+    #   returns the distance from this node to other node (manhattan distance)
+    def get_h_score(self, other_node):
+        return abs(self.x - other_node.x) + abs(self.y - other_node.y)

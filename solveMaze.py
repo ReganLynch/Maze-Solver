@@ -29,15 +29,16 @@ def main():
     maze.print_maze_data()
     #create the maze solver object
     maze_solver = MazeSolver(maze)
+
     #generate a path, and the path length through depth-first search
-    root, path_length = maze_solver.depthFirst()
+    root, path_length = maze_solver.AStar()
+
     #print some information about the performance of the search alg
     maze_solver.print_maze_solve_data()
-
     #draw the path to the maze
     image_processor.drawPath(root, path_length)
     #save the image
-    image_processor.saveSolvedMaze('DFS')
+    image_processor.saveSolvedMaze('A*')
 
 if __name__ == '__main__':
     main()

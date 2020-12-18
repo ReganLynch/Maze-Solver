@@ -1,6 +1,7 @@
 from mazeNode import *
 import datetime
 from collections import deque
+from heapq import heapify, heappush, heappop
 
 class MazeSolver:
 
@@ -111,11 +112,38 @@ class MazeSolver:
         #--------here-------------
         #reset the visited array
         self.visited = [False for i in range (0, self.maze.num_nodes)]
+        #initialize the open set
+        open_set = [self.maze.start_node]
+        #initialize the closed set (just stores indexes of nodes that are closed)
+        closed_set_indexes = set()
+        #perform A* loop
+        while len(open_set) > 0:
+            #get the node with the lowest f score (f = g + h) -> use min heap
+            current_node = heappop(open_set)
+            #add the current node to the closed set
+            closed_set_indexes.append(current_node.node_index)
+            #if the current node is the end node, then we are done.
+            if current_node == self.maze.end_node:
+                print('END FOUND!')
+                exit()
+                break
+            #loop through all neighbours of the current node
+            for neighbour in current_node.get_neighbours():
+                #if the neighbour is not in the closed set
+                if not neighbour.node_index in closed_set_indexes:
+                    #test cost is g (cost to get to current) + w (cost go go from current to neighbour -> h function is overloaded to handle this)
+                    neighbour_tent_g_score = current_node.g + current_node.get_h_score(neighbour)
+                    #check if the tentative g score is less than the real g score of the node
+                    #if neighbour_tent_g_score <= neighbour.g:
+
+
+
         #return the root node and the path length of the path that ends at last_node
         #ret = last_node.get_path_root_and_length()
-        #set the time it took to perform bfs
+        #set the time it took to perform a*
         self.solve_end_time = datetime.datetime.now()
         #self.num_nodes_on_solved_path = ret[1]
+        exit()
         return 1
 
     def print_maze_solve_data(self):
