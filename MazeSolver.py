@@ -104,28 +104,32 @@ class MazeSolver:
         self.num_nodes_on_solved_path = ret[1]
         return ret
 
+    #implementation of A* search algorithm for maze solving
     def AStar(self):
         #initialize the start_time of the solve
         self.solve_start_time = datetime.datetime.now()
         self.most_recent_search_alg = 'A*'
         #perform A* algorithm search
         #--------here-------------
-        #reset the visited array
-        self.visited = [False for i in range (0, self.maze.num_nodes)]
         #initialize the open set
         open_set = [self.maze.start_node]
+        heapify(open_set)
+        #initialize open set indixes
+        open_set_indexes = set()
+        open_set_indexes.add(self.maze.start_node.node_index)
         #initialize the closed set (just stores indexes of nodes that are closed)
         closed_set_indexes = set()
         #perform A* loop
         while len(open_set) > 0:
             #get the node with the lowest f score (f = g + h) -> use min heap
             current_node = heappop(open_set)
+            #remove this node from the open node index set
+            open_set_indexes.remove(current_node.node_index)
             #add the current node to the closed set
-            closed_set_indexes.append(current_node.node_index)
+            closed_set_indexes.add(current_node.node_index)
             #if the current node is the end node, then we are done.
             if current_node == self.maze.end_node:
                 print('END FOUND!')
-                exit()
                 break
             #loop through all neighbours of the current node
             for neighbour in current_node.get_neighbours():
@@ -133,18 +137,43 @@ class MazeSolver:
                 if not neighbour.node_index in closed_set_indexes:
                     #test cost is g (cost to get to current) + w (cost go go from current to neighbour -> h function is overloaded to handle this)
                     neighbour_tent_g_score = current_node.g + current_node.get_h_score(neighbour)
-                    #check if the tentative g score is less than the real g score of the node
-                    #if neighbour_tent_g_score <= neighbour.g:
-
-
+                    #if neighbour is in the open set, and this path cost is less than the neighbours current cost
+                    if neighbour.node_index in open_set_indexes and neighbour_tent_g_score < neighbour.g:
+                        #remove neighbour from open list heap
+                        index_in_heap = neighbour.find_index_in_heap(open_set)
+                        if not index_in_heap == -1:
+                            open_set[index_in_heap] = open_set[-1]
+                            open_set.pop()
+                            if i < len(open_set):
+                                heapq._siftup(open_set, index_in_heap)
+                                heapq._siftdown(open_set, 0, index_in_heap)
+                        #remove neighbour from node index lookup set
+                        open_set_indexes.remove(neighbour.node_index)
+                    #if the neighbour is in the closed list, and this path cost is less than the neighbours current cost
+                    if neighbour.node_index in closed_set_indexes and neighbour_tent_g_score < neighbour.g:
+                        #remove neighbour from closed set
+                        closed_set_indexes.remove(neighbour.node_index)
+                    #if the neighbour is not in the open or closed list
+                    if (not neighbour.node_index in open_set_indexes) and (not neighbour.node_index in closed_set_indexes):
+                        #set the parent node of this node to the current poped-off node
+                        neighbour.prev_on_path = current_node
+                        #set the next node for the current node
+                        current_node.next_on_path = neighbour
+                        #set g and f costs of the neighbour
+                        neighbour.g = neighbour_tent_g_score
+                        neighbour.f = neighbour.g + neighbour.get_h_score(self.maze.end_node)
+                        #add neighbour to open list
+                        heappush(open_set, neighbour)
+                        #add neighbour to open index set
+                        open_set_indexes.add(neighbour.node_index)
 
         #return the root node and the path length of the path that ends at last_node
-        #ret = last_node.get_path_root_and_length()
+        #HERE
+        ret = self.maze.end_node.get_path_root_and_length()
         #set the time it took to perform a*
         self.solve_end_time = datetime.datetime.now()
-        #self.num_nodes_on_solved_path = ret[1]
-        exit()
-        return 1
+        self.num_nodes_on_solved_path = ret[1]
+        return ret
 
     def print_maze_solve_data(self):
         elapsed_time = self.solve_end_time - self.solve_start_time

@@ -29,10 +29,8 @@ def main():
     maze.print_maze_data()
     #create the maze solver object
     maze_solver = MazeSolver(maze)
-
     #generate a path, and the path length through depth-first search
     root, path_length = maze_solver.AStar()
-
     #print some information about the performance of the search alg
     maze_solver.print_maze_solve_data()
     #draw the path to the maze

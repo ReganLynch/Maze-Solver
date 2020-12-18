@@ -15,7 +15,7 @@ class mazeNode:
         self.next_on_path = None
         self.prev_on_path = None
         self.g = 0 if is_start else 10**1000      #used in A* algorithm
-        self.f = 0      #used in A* algorithm
+        self.f = 0 if is_start else 10**1000      #used in A* algorithm
 
     def set_top_neighbour(self, neighbour):
         self.top_neighbour = neighbour
@@ -61,6 +61,16 @@ class mazeNode:
             last_node.prev_on_path.next_on_path = last_node
             last_node = last_node.prev_on_path
         return last_node, path_length
+
+    def find_index_in_heap(self, heap):
+        index = 0
+        found_node = False
+        for node in heap:
+            if node.node_index == self.node_index:
+                found_node = True
+                break
+            index += 1
+        return index if found_node else -1
 
     #heuristic function -> used in A* search algorithm
     #   returns the distance from this node to other node (manhattan distance)
