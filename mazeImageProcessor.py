@@ -24,10 +24,10 @@ class mazeImageProcessor:
             if self.pixels[i,0] == mazeImageProcessor.WHITE:
                 self.cube_size = self.cube_size + 1
         #if start node was not on the top row, check left-most column
-        if self.cube_size = 0:
+        if self.cube_size == 0:
             for i in range(0, self.height_px):
                 if self.pixels[0,i] == mazeImageProcessor.WHITE:
-                    self.cube_size = self.cube_size + 1
+                    self.cube_size = self.cube_size + 1   
 
     #determines the dimentions of the maze, in cubes
     def findMazeDimentions(self):

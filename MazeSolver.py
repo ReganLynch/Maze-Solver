@@ -1,7 +1,7 @@
 from mazeNode import *
 import datetime
 from collections import deque
-from heapq import heapify, heappush, heappop
+from heapq import heapify, heappush, heappop, _siftup, _siftdown
 
 class MazeSolver:
 
@@ -144,9 +144,9 @@ class MazeSolver:
                         if not index_in_heap == -1:
                             open_set[index_in_heap] = open_set[-1]
                             open_set.pop()
-                            if i < len(open_set):
-                                heapq._siftup(open_set, index_in_heap)
-                                heapq._siftdown(open_set, 0, index_in_heap)
+                            if index_in_heap < len(open_set):
+                                _siftup(open_set, index_in_heap)
+                                _siftdown(open_set, 0, index_in_heap)
                         #remove neighbour from node index lookup set
                         open_set_indexes.remove(neighbour.node_index)
                     #if the neighbour is in the closed list, and this path cost is less than the neighbours current cost

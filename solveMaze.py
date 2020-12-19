@@ -4,12 +4,15 @@ from Maze import *
 from MazeSolver import *
 from os import path
 
+astar = "ASTAR"
+depth_first = "DEPTH FIRST"
+breadth_first = "BREADTH FIRST"
 
 def main():
     #check that the file path was passed
-    if len(sys.argv) != 2:
+    if len(sys.argv) != 3:
         print('invalid number of arguments passed')
-        print('usage: solveMaze.py <file_path>')
+        print('usage: solveMaze.py <file_path> -<search alg>')
         exit()
     file_path = str(sys.argv[1])
     #check if the passed file is valid
@@ -21,6 +24,18 @@ def main():
     if(file_extension != '.bmp' and file_extension != '.BMP'):
         print('invalid file path')
         exit()
+    #determine the selected search algorithm
+    search_algo = str(sys.argv[2])
+    if search_algo.lower() == 'a*':
+        search_algo = astar
+    elif search_algo.lower() == 'depth-first':
+        search_algo = depth_first
+    elif search_algo.lower() == 'breadth-first':
+        search_algo = breadth_first
+    else:
+        print('invalid search algorithm defined. options are:')
+        print('   a*, depth-first, breadth-first')
+        exit()
     #create a maze image processor object
     image_processor = mazeImageProcessor(path.abspath(file_path))
     #create the maze object from the image proccessing objects boolean maze
@@ -30,13 +45,23 @@ def main():
     #create the maze solver object
     maze_solver = MazeSolver(maze)
     #generate a path, and the path length through depth-first search
-    root, path_length = maze_solver.AStar()
+    if search_algo == astar:
+        root, path_length = maze_solver.AStar()
+    elif search_algo == depth_first:
+        root, path_length = maze_solver.depthFirst()
+    else:
+        root, path_length = maze_solver.breadthFirst()
     #print some information about the performance of the search alg
     maze_solver.print_maze_solve_data()
     #draw the path to the maze
     image_processor.drawPath(root, path_length)
     #save the image
-    image_processor.saveSolvedMaze('A*')
+    if search_algo == astar:
+        image_processor.saveSolvedMaze('SOLVED-A*')
+    elif search_algo == depth_first:
+        image_processor.saveSolvedMaze('SOLVED-Depth-First')
+    else:
+        image_processor.saveSolvedMaze('SOLVED-Breadth-First')
 
 if __name__ == '__main__':
     main()

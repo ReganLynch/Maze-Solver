@@ -21,19 +21,19 @@ class Maze:
         #first find start and end nodes (check top, bottom, then left and right sides of maze)
         #   search top and bottom (top is start, bottom is end)
         for i in range(0, self.maze_width):
-            #if found start
+            #if found start on top
             if self.boolean_maze[0][i]:
                 self.start_node = mazeNode(i, 0, 0, is_start=True)
-            #if found end
+            #if found end on bottom
             elif self.boolean_maze[self.maze_height-1][i]:
                 self.end_node = mazeNode(i, self.maze_height-1, 1, is_end=True)
         #   search left and right (left is start, right is end)
         for i in range(0, self.maze_height):
-            #if found start
+            #if found start on left
             if self.boolean_maze[i][0]:
                 self.start_node = mazeNode(0, i, 0, is_start=True)
-            #if found end
-            elif self.boolean_maze[i][self.maze_height-1]:
+            #if found end on right
+            elif self.boolean_maze[i][self.maze_width-1]:
                 self.end_node = mazeNode(self.maze_width-1, i, 1, is_end=True)
         #validate that the start and end nodes where found
         err = False
@@ -96,13 +96,23 @@ class Maze:
                     if not prev_vertical_nodes[x] == None:
                         curr_node.set_top_neighbour(prev_vertical_nodes[x])
                         prev_vertical_nodes[x].set_bottom_neighbour(curr_node)
-                    #check if this node connects to either the start node or the end node
-                    if curr_node.x == self.start_node.x and curr_node.y == self.start_node.y + 1:  #if connected to start node
+
+                    #TODO: FIX
+                    #check if this node connects to the end node
+                    if curr_node.x == self.start_node.x and curr_node.y == self.start_node.y + 1:  #if connected to start node (TOP)
                         self.start_node.set_bottom_neighbour(curr_node)
                         curr_node.set_top_neighbour(self.start_node)
-                    elif curr_node.x == self.end_node.x and curr_node.y == self.end_node.y - 1:  #if connected to end node
+                    elif curr_node.x == self.start_node.x + 1 and curr_node.y == self.start_node.y:
+                        self.start_node.set_right_neighbour(curr_node)
+                        curr_node.set_left_neighbour(self.start_node)
+                    #check if this node connects to the end node
+                    elif curr_node.x == self.end_node.x and curr_node.y == self.end_node.y - 1:  #if connected to end node (BOTTOM)
                         self.end_node.set_top_neighbour(curr_node)
                         curr_node.set_bottom_neighbour(self.end_node)
+                    elif curr_node.x == self.end_node.x - 1 and curr_node.y == self.end_node.y:
+                        self.end_node.set_left_neighbour(curr_node)
+                        curr_node.set_right_neighbour(self.end_node)
+
                     #set the previous vertical node
                     prev_vertical_nodes[x] = curr_node
                     #set the previous horizontal node
