@@ -55,6 +55,7 @@ class MazeSolver:
         #set the time it took to perform dfs
         self.solve_end_time = datetime.datetime.now()
         self.num_nodes_on_solved_path = ret[1]
+        self.num_total_cubes_on_path = ret[2]
         return ret
 
     #performs a breadth-first search on the maze, and returns the root node of a path
@@ -102,6 +103,7 @@ class MazeSolver:
         #set the time it took to perform bfs
         self.solve_end_time = datetime.datetime.now()
         self.num_nodes_on_solved_path = ret[1]
+        self.num_total_cubes_on_path = ret[2]
         return ret
 
     #implementation of A* search algorithm for maze solving
@@ -129,7 +131,6 @@ class MazeSolver:
             closed_set_indexes.add(current_node.node_index)
             #if the current node is the end node, then we are done.
             if current_node == self.maze.end_node:
-                print('END FOUND!')
                 break
             #loop through all neighbours of the current node
             for neighbour in current_node.get_neighbours():
@@ -171,10 +172,12 @@ class MazeSolver:
         #set the time it took to perform a*
         self.solve_end_time = datetime.datetime.now()
         self.num_nodes_on_solved_path = ret[1]
+        self.num_total_cubes_on_path = ret[2]
         return ret
 
     def print_maze_solve_data(self):
         elapsed_time = self.solve_end_time - self.solve_start_time
         print(self.most_recent_search_alg, ' search path finding results...')
-        print('Number of nodes on found path: ', self.num_nodes_on_solved_path)
+        print('Number of decision nodes on found path: ', self.num_nodes_on_solved_path)
+        print('Total Path Length: ', self.num_total_cubes_on_path)
         print('Time taken to find path: ', elapsed_time.total_seconds(), ' seconds')

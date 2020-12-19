@@ -8,6 +8,8 @@ astar = "ASTAR"
 depth_first = "DEPTH FIRST"
 breadth_first = "BREADTH FIRST"
 
+#TODO: FIX image saving issues, FIX breadth-first better than a* -> PATH LENGTH?????
+
 def main():
     #check that the file path was passed
     if len(sys.argv) != 3:
@@ -45,16 +47,17 @@ def main():
     #create the maze solver object
     maze_solver = MazeSolver(maze)
     #generate a path, and the path length through depth-first search
+    #TODO: HERE
     if search_algo == astar:
-        root, path_length = maze_solver.AStar()
+        root, num_desc_nodes_on_path, total_path_length = maze_solver.AStar()
     elif search_algo == depth_first:
-        root, path_length = maze_solver.depthFirst()
+        root, num_desc_nodes_on_path, total_path_length = maze_solver.depthFirst()
     else:
-        root, path_length = maze_solver.breadthFirst()
+        root, num_desc_nodes_on_path, total_path_length = maze_solver.breadthFirst()
     #print some information about the performance of the search alg
     maze_solver.print_maze_solve_data()
     #draw the path to the maze
-    image_processor.drawPath(root, path_length)
+    image_processor.drawPath(root, num_desc_nodes_on_path)
     #save the image
     if search_algo == astar:
         image_processor.saveSolvedMaze('SOLVED-A*')

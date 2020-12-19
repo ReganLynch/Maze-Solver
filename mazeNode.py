@@ -54,13 +54,15 @@ class mazeNode:
     #this method also makes the forward connections of all of these nodes
     def get_path_root_and_length(self):
         #loop back through the PathNodes to get the start node and make the forward connections
-        path_length = 1
+        num_decision_nodes = 1
+        num_total_cubes_on_path = 1
         last_node = self
         while last_node.prev_on_path != None:
-            path_length = path_length + 1
+            num_total_cubes_on_path += last_node.get_h_score(last_node.prev_on_path)
+            num_decision_nodes = num_decision_nodes + 1
             last_node.prev_on_path.next_on_path = last_node
             last_node = last_node.prev_on_path
-        return last_node, path_length
+        return last_node, num_decision_nodes, num_total_cubes_on_path
 
     def find_index_in_heap(self, heap):
         index = 0
