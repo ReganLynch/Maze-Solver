@@ -27,12 +27,12 @@ class mazeImageProcessor:
         if self.cube_size == 0:
             for i in range(0, self.height_px):
                 if self.pixels[0,i] == mazeImageProcessor.WHITE:
-                    self.cube_size = self.cube_size + 1   
+                    self.cube_size = self.cube_size + 1
 
     #determines the dimentions of the maze, in cubes
     def findMazeDimentions(self):
-        self.width_cubes = int(self.width_px/self.cube_size) - 1  ## TODO: shouldnt have to minus 1 from this
-        self.height_cubes = int(self.height_px/self.cube_size) - 1 ## TODO: shouldne have to minus 1 from this
+        self.width_cubes = int(self.width_px/self.cube_size)
+        self.height_cubes = int(self.height_px/self.cube_size)
 
     #generates a boolean array, which represents the maze (false for wall, true for path)
     def createMazeBooleanArray(self):

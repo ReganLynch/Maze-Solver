@@ -8,8 +8,6 @@ astar = "ASTAR"
 depth_first = "DEPTH FIRST"
 breadth_first = "BREADTH FIRST"
 
-#TODO: FIX image saving issues, FIX breadth-first better than a* -> PATH LENGTH?????
-
 def main():
     #check that the file path was passed
     if len(sys.argv) != 3:
